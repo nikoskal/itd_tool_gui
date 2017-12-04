@@ -1,0 +1,19 @@
+<md-content ng-controller="TrendsController as vm">
+<div class="table-responsive-vertical md-whiteframe-z1">
+    <table id="table" class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Title</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in vm.discoverData ">
+            <td data-title="type">{{data.type}}</td>
+            <td data-title="title">{{data.title}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</md-content>
+

@@ -1,0 +1,195 @@
+<!--<h2>Trends Discovery Results</h2>-->
+<div align="center"><h2>History of Discovered Results</h2></div>
+
+<div layout-gt-md="row">
+
+     <div class="col-md-6"  style="background-color:white; margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div class="panel panel-default">
+            <div align="center"><h3>Related Queries</h3></div>
+            <div class="table-responsive-vertical ">
+
+                <!-- exact table from live demo -->
+                <div class="span3">
+                    <table md-table md-row-select multiple class="table-hover table-bordered" >
+                        <thead md-head >
+                        <tr md-row>
+                            <th md-column>Query</th>
+                            <th md-column >Value</th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row ng-repeat="relateddata in discoverRelatedData">
+                            <td md-cell>{{relateddata.query}}</td>
+                            <td md-cell>{{relateddata.value}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+     <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+                   <div align="center"><h3>Keyword Volume</h3></div>
+             <div class="table-responsive-vertical">
+                <!-- exact table from live demo -->
+                <div class="span3">
+                    <table md-table md-row-select multiple class="table-hover table-bordered" >
+                        <thead md-head >
+                        <tr md-row>
+                            <th md-column>Year</th>
+                            <th md-column >Month</th>
+                            <th md-column >Search Count</th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row ng-repeat="volumedata in discoverVolumeData track by $index">
+                            <td md-cell>{{volumedata.year}}</td>
+                            <td md-cell>{{volumedata.month}}</td>
+                            <td md-cell>{{volumedata.count}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+         </div>
+        </div>
+</div>
+
+
+<div layout-gt-md="row">
+<div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center"><h3>Interest by Time</h3></div>
+    <div class="table-responsive-vertical">
+        <!-- exact table from live demo -->
+        <div class="span3">
+            <table md-table md-row-select multiple class="table-hover table-bordered" >
+                <thead md-head >
+                <tr md-row>
+                    <th md-column>Date</th>
+                    <th md-column >Interest</th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row ng-repeat="timedata in discoverTimeInterestData track by $index">
+                    <td md-cell>{{timedata.date}}</td>
+                    <td md-cell>{{timedata.interest}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center"><h3>Related Questions</h3></div>
+        <div class="table-responsive-vertical">
+            <!-- exact table from live demo -->
+            <div class="span3">
+                <table md-table md-row-select multiple class="table-hover table-bordered" >
+                    <thead md-head >
+                    <tr md-row>
+                        <th md-column>Count</th>
+                        <th md-column >Year</th>
+                        <th md-column >Month</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="volumedata in discoverVolumeData track by $index">
+                        <td md-cell>{{volumedata.count}}</td>
+                        <td md-cell>{{volumedata.year}}</td>
+                        <td md-cell>{{volumedata.month}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div layout-gt-md="row">
+    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center"><h3>Region Interest</h3></div>
+        <div class="table-responsive-vertical">
+            <!-- exact table from live demo -->
+            <div class="span3">
+                <table md-table md-row-select multiple class="table-hover table-bordered" >
+                    <thead md-head >
+                    <tr md-row>
+                        <th md-column>Region</th>
+                        <th md-column >Interest</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="regiondata in discoverRegionInterestData track by $index">
+                        <td md-cell>{{regiondata.region}}</td>
+                        <td md-cell>{{regiondata.interest}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center"><h3>Twitter HashTags</h3></div>
+        <div class="table-responsive-vertical">
+            <!-- exact table from live demo -->
+            <div class="span3">
+                <table md-table md-row-select multiple class="table-hover table-bordered" >
+                    <thead md-head >
+                    <tr md-row>
+                        <th md-column>Count</th>
+                        <th md-column >Year</th>
+                        <th md-column >Month</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="volumedata in discoverVolumeData track by $index">
+                        <td md-cell>{{volumedata.count}}</td>
+                        <td md-cell>{{volumedata.year}}</td>
+                        <td md-cell>{{volumedata.month}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div align="center"><h3>Performed Queries</h3></div>
+<div class="table-responsive-vertical md-whiteframe-z1">
+    <table id="table" class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Keywords</th>
+            <th>Time Period</th>
+            <th>Countries/Cities</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in vm.queriesData ">
+            <td data-title="ID">{{data.id}}</td>
+            <td data-title="description">{{data.description}}</td>
+            <td data-title="keyword(s)">{{data.keywords}}</td>
+            <td data-title="period">{{data.start_date.substring(0, data.start_date.length - 9)}} {{data.end_date.substring(0, data.end_date.length - 9)}}</td>
+            <ion-icon name="checkmark" color="secondary" item-right *ngIf="item.status"></ion-icon>
+            <td data-title="location">{{data.location}}</td>
+            <td data-title=""> <md-button class="md-raised md-mybutton">Show</md-button><md-button class="md-raised md-mybutton">Delete</md-button></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</div>

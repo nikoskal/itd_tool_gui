@@ -1,0 +1,141 @@
+<div align="center"><h2>Query Descriptions</h2></div>
+
+<div class="table-responsive-vertical md-whiteframe-z1">
+    <table id="table" class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Keywords</th>
+            <th>Category</th>
+            <th>Sources</th>
+            <th>Time Period</th>
+            <th>Related Questions</th>
+            <th>Targeted region(s)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in vm.queriesData ">
+            <td data-title="ID">{{data.id}}</td>
+            <td data-title="description">{{data.description}}</td>
+            <td data-title="keywords">{{data.keywords}}</td>
+            <td data-title="category">{{data.category}}</td>
+            <td data-title="sources">Twitter:{{data.twitter}}<br>Google:{{data.google}}<br>Youtube:{{data.youtube}}</td>
+            <td data-title="period">{{data.start_date.substring(0, data.start_date.length - 9)}} <br>until<br> {{data.end_date.substring(0, data.end_date.length - 9)}}</td>
+
+            <ion-icon name="checkmark" color="secondary" item-right *ngIf="item.status"></ion-icon>
+
+
+            <td data-title="questions">{{data.questions}}</td>
+            <td data-title="location">{{data.location}}</td>
+
+            <td data-title="">
+                <md-button class="md-raised" ><a href="http://localhost:3000/#!/trends#queries">Discover</a></md-button>
+                <md-button class="md-raised" ng-click='edit(data.id)'>View/Edit</md-button>
+                <md-button class="md-raised" ng-click='deleteQuery(data.id)'>Delete</md-button>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h1>Add Query Parameters</h1>
+
+                <div ng-cloak layout="column" ng-cloak class="md-inline-form" >
+                    <md-content layout-padding>
+                        <div>
+                            <form ng-submit="vm.postQuery()" name="userForm">
+                                <div layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Description</label>
+                                        <input ng-model="vm.newquery.description">
+                                    </md-input-container>
+                                </div>
+                                <div layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Keyword</label>
+                                        <input ng-model="vm.newquery.keywords">
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <div layout="row">
+                                        <md-button class="md-raised" ng-click='gettopics(vm.newquery.keywords)'>Retrieve Topics</md-button>
+                                            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="30px"></md-progress-circular>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Popular topics</label>
+                                        <md-select ng-model="vm.newquery.topic">
+                                            <md-option ng-repeat="topic in vm.topics" value="{{topic.mid}}">
+                                                {{topic.type}} - {{topic.title}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Category</label>
+                                        <md-select ng-model="vm.newquery.category">
+                                            <md-option ng-repeat="category in categories" value="{{category.id}}">
+                                                {{category.name}}
+                                            </md-option>
+                                        </md-select>
+
+
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+
+                                    </md-input-container>
+                                </div>
+
+
+
+
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label>Start-date (e.g., 2015-12-25)</label>
+                                        <input ng-model="vm.newquery.start_date"></input>
+                                    </md-input-container>
+
+                                    <md-input-container>
+                                        <label>End-date(e.g., 2016-12-25)</label>
+                                        <input ng-model="vm.newquery.end_date"></input>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label>Targeted region(s)</label>
+                                        <input ng-model="vm.newquery.location"></input>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout-sm="row">
+                                    <label>Sources:</label>
+                                        <md-checkbox ng-model="vm.newquery.twitter">
+                                            <label>Twitter</label>
+                                        </md-checkbox>
+                                        <md-checkbox ng-model="vm.newquery.google">
+                                            <label>Google</label>
+                                        </md-checkbox>
+                                    <md-checkbox ng-model="vm.newquery.youtube">
+                                        <label>YouTube</label>
+                                    </md-checkbox>
+                                </div>
+                                <div layout-sm="row">
+
+                                    <md-checkbox ng-model="vm.newquery.inference">
+                                        <label>Enable inference</label>
+                                    </md-checkbox>
+
+                                    <md-checkbox ng-model="vm.newquery.questions">
+                                        <label>Extract relevant questions</label>
+                                    </md-checkbox>
+                                </div>
+                                <input type="submit" id="submit" value="Submit Query Configuration" />
+                            </form>
+                        </div>
+                    </md-content>
+                </div>
