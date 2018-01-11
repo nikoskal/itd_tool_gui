@@ -3,7 +3,7 @@
   angular
     .module('app')
     .controller('TrendsController', [
-        '$http','$scope',
+        '$http','$scope', '$location', '$anchorScroll',
         TrendsController
       
     ]);
@@ -12,7 +12,7 @@
   vm.totalItems = 0;
 
 
-  function TrendsController($http, $scope) {
+  function TrendsController($http, $scope, $location, $anchorScroll) {
     var vm = this;
       $scope.discoverKwdData = [];
       $scope.discoverRelatedData = [];
@@ -26,6 +26,7 @@
       $scope.isLoading =  false;
       $scope.discoverRegionInterestData = [];
       $scope.keyword = {};
+      $scope.description = {};
 
 
       // $scope.reverseSortRegion = false;
@@ -52,12 +53,12 @@
           $scope.discoverTweets = [];
           $scope.discoverRegionInterestData = [];
           $scope.keyword = {};
-
+          $scope.description = {};
       };
 
       function retrieveAllQueries() {
 
-          $http.get('http://127.0.0.1:8000/query-parameters/').then(function (response) {
+          $http.get(DJANGO_SERVICE_URL+'/query-parameters/').then(function (response) {
               vm.queriesData = response.data;
           });
           // reset_data();
@@ -66,14 +67,20 @@
 
 
 
-      $scope.discover = function(queryId, keyword) {
+      $scope.discover = function(queryId, keyword, description) {
 
           console.log("inside discover",  queryId);
           $scope.clearalldata();
           $scope.isLoading = true;
           $scope.keyword = keyword;
+          $scope.description = description;
 
-          $http.get('http://127.0.0.1:8000/discover/'+queryId)
+          console.log("calling scroll");
+          $location.hash('top');
+          $anchorScroll();
+          console.log(" scrolled?");
+
+          $http.get(DJANGO_SERVICE_URL+'/discover/'+queryId)
               .then(function successCallback(response) {
                   $scope.isLoading = false;
                   console.log("inside success discover response", response );

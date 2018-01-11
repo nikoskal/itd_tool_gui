@@ -15,7 +15,8 @@
         vm.queriesData  =[];
         vm.postQuery = postNewQuery;
         $scope.isLoading =  false;
-
+        vm.topics = {};
+        vm.clicktoopen = {};
 
         $scope.categories = [
             {name:"All categories",
@@ -128,6 +129,8 @@
                 topic:"",
                 category:""
             };
+            vm.topics = {};
+            vm.clicktoopen = {};
         }
 
 
@@ -143,7 +146,7 @@
                     return $scope.categories[i].name;
                 }
             }
-        }
+        };
 
 
 
@@ -151,7 +154,8 @@
         function retrieveAllQueries() {
 
             // $http.get('http://147.102.22.76:8000/query-parameters/').then(function (response) {
-            $http.get('http://127.0.0.1:8000/query-parameters/').then(function (response) {
+            // $http.get('http://147.102.22.76:8000/query-parameters/').then(function (response) {
+            $http.get(DJANGO_SERVICE_URL+'/query-parameters/').then(function (response) {
                 vm.queriesData = response.data;
                 // console.log("inside vm.queriesData",  vm.queriesData);
                 // console.log("inside vm.queriesData",  vm.queriesData[0].category);
@@ -163,7 +167,7 @@
             });
             reset_data();
         }
-        retrieveAllQueries()
+        retrieveAllQueries();
 
 
         function postNewQuery() {
@@ -176,13 +180,15 @@
             };
 
             // $http.post('http://147.102.22.76:8000/query-parameters/', vm.newquery, config)
-            $http.post('http://127.0.0.1:8000/query-parameters/', vm.newquery, config)
+            $http.post(DJANGO_SERVICE_URL+'/query-parameters/', vm.newquery, config)
                 .then(function successCallback(response) {
                     console.log("inside success post response", response );
+                    retrieveAllQueries();
                 }, function errorCallback(response) {
                     console.log("inside error post response", response );
+                    retrieveAllQueries();
                 });
-            retrieveAllQueries();
+
         }
 
 
@@ -196,7 +202,7 @@
             };
 
             // var myurl = 'http://147.102.22.76:8000/query-parameters/'+queryId;
-            var myurl = 'http://127.0.0.1:8000/query-parameters/'+queryId;
+            var myurl = DJANGO_SERVICE_URL+'/query-parameters/'+queryId+'/';
 
             console.log("inside delete",  myurl);
 
@@ -205,32 +211,43 @@
                 url: myurl
             }).then(function successCallback(response) {
                 console.log("inside success delete response", response );
-
+                retrieveAllQueries();
             }, function errorCallback(response) {
                 console.log("inside error delete response", response );
+                retrieveAllQueries();
             });
             console.log("delete  retrieveAllQueries");
-            retrieveAllQueries();
+
         };
 
 
 
         $scope.gettopics= function(keyword){
             console.log("gettopics",  keyword);
+            vm.clicktoopen = {};
             $scope.isLoading = true;
+            // if keyword contains spaces change them with _
+
+
             vm.topics = {};
-            $http.get('http://127.0.0.1:8000/gtrends-keyword-topic/'+keyword).then(function (response) {
+            var myurl = DJANGO_SERVICE_URL+'/gtrends-keyword-topic/'+keyword+'/';
+            console.log("myurl",  myurl);
+            $http.get(myurl).then(function (response) {
+                console.log("gettopics", response);
                 vm.topics = response.data;
                 var none = {
                     type: 'none',
                     title: 'none',
                     mid: 'none',
-                }
-                vm.topics.push(none)
-                vm.topics.type =
+                };
+                vm.topics.push(none);
                 $scope.isLoading = false;
-                console.log("vm.deactivated = false;",  $scope.isLoading);
+                // console.log("vm.deactivated = false;", $scope.isLoading);
+                vm.clicktoopen = "click to select a topic";
+            }, function errorCallback(response) {
+                console.log("inside error gettopics, response:", response );
             });
+
             vm.activated = false;
         };
 

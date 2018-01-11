@@ -26,7 +26,7 @@
 
       function retrieveAllQueries() {
 
-          $http.get('http://127.0.0.1:8000/query-parameters/').then(function (response) {
+          $http.get(DJANGO_SERVICE_URL+'/query-parameters/').then(function (response) {
               vm.queriesData = response.data;
           });
           // reset_data();
@@ -40,7 +40,7 @@
 
           console.log("inside discover",  queryId);
 
-          $http.get('http://127.0.0.1:8000/discover/'+queryId)
+          $http.get(DJANGO_SERVICE_URL+'/discover/'+queryId)
               .then(function successCallback(response) {
                   console.log("inside success discover response", response );
 

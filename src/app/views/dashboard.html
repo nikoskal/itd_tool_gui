@@ -1,3 +1,27 @@
+<!--<h4 ng-if="vm.auth.isAuthenticated()">-->
+  <!--You are logged in!-->
+  <!--<button-->
+          <!--class="btn btn-primary btn-margin"-->
+          <!--ng-if="vm.auth.isAuthenticated()"-->
+          <!--ng-click="vm.auth.logout()">-->
+    <!--Log Out-->
+  <!--</button>-->
+<!--</h4>-->
+<!--<h4 ng-if="!vm.auth.isAuthenticated()">-->
+  <!--You are not logged in! Please <a ng-click="vm.auth.login()">Log In</a> to continue.-->
+  <!--<button-->
+          <!--class="btn btn-primary btn-margin"-->
+          <!--ng-if="!vm.auth.isAuthenticated()"-->
+          <!--ng-click="vm.auth.login()">-->
+    <!--Log In-->
+  <!--</button>-->
+<!--</h4>-->
+
+
+
+<!--<div ng-if="isauth">-->
+
+
 <div layout-gt-md="row">
 
   <div align="center">
@@ -9,14 +33,13 @@
 </div>
 
 
-
 <div layout-gt-md="row">
 
   <div class="col-md-6"  style="background-color:white; margin: 30px; padding:30px; box-shadow: 10px 10px 5px grey;">
     <div class="panel panel-default">
 
       <div align="center"><h3>Step 1: </h3></div>
-      <a href="http://localhost:3000/#!/queries">
+      <a href="http://147.102.22.76/#/queries">
       <div align="center"><h3>Configure a new Query</h3></div>
         <div align="center"><i class="material-icons">youtube_searched_for</i></div>
       </a>
@@ -26,7 +49,8 @@
   <div class="col-md-6"  style="background-color:white; margin: 30px; padding:30px;  box-shadow: 10px 10px 5px grey;">
     <div class="panel panel-default">
       <div align="center"><h3>Step 2: </h3></div>
-      <a href="http://localhost:3000/#!/trends">
+      <!--<a href="http://147.102.22.76:3000/#!/trends">-->
+        <a href="http://147.102.22.76/#/trends">
         <div align="center"><h3>Discover Trends based on a Query</h3></div>
         <div align="center"><i class="material-icons">trending_up</i></div>
       </a>
@@ -35,10 +59,13 @@
   <div class="col-md-6"  style="background-color:white; margin: 30px; padding:30px;  box-shadow: 10px 10px 5px grey;">
     <div class="panel panel-default">
       <div align="center"><h3>Step 3: </h3></div>
-      <a href="http://localhost:3000/#!/history">
+      <a href="http://147.102.22.76/#/history">
+      <!--<a href="http://147.102.22.76:3000/#!/history">-->
         <div align="center"><h3>Review History of Discoveries</h3></div>
         <div align="center"><i class="material-icons">history</i></div>
       </a>
     </div>
   </div>
 </div>
+
+<!--</div>-->

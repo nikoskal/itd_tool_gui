@@ -3,13 +3,17 @@
   angular
        .module('app')
        .controller('MainController', [
-          'navService', '$mdSidenav', '$mdBottomSheet', '$log', '$q', '$state', '$mdToast',
+          'navService','authService', '$mdSidenav', '$mdBottomSheet', '$log', '$q', '$state', '$mdToast',
           MainController
        ]);
 
-  function MainController(navService, $mdSidenav, $mdBottomSheet, $log, $q, $state, $mdToast) {
-    var vm = this;
+  MainController.$inject = ['authService'];
 
+  function MainController(navService, authService, $mdSidenav, $mdBottomSheet, $log, $q, $state, $mdToast ) {
+    var vm = this;
+    vm.auth = authService;
+    // console.log("is auth up? ", vm.auth);
+    // console.log("isAuthenticated dbc", vm.auth.isAuthenticated());
     vm.menuItems = [ ];
     vm.selectItem = selectItem;
     vm.toggleItemsList = toggleItemsList;

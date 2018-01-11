@@ -1,6 +1,5 @@
-<!--<h2>Trends Discovery Results</h2>-->
-<div align="center"><h2>Trends Discovery Results</h2>
-    <div>Searching term: {{keyword}}</div>
+<div id="top" align="center"><h2>Trends Discovery Results</h2>
+    <div>Query Description: {{description}}  - Searching term: {{keyword}}</div>
     <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="30px"></md-progress-circular>
 
 </div>
@@ -190,7 +189,7 @@
             <td data-title="period">{{data.start_date.substring(0, data.start_date.length - 9)}} {{data.end_date.substring(0, data.end_date.length - 9)}}</td>
             <ion-icon name="checkmark" color="secondary" item-right *ngIf="item.status"></ion-icon>
             <td data-title="location">{{data.location}}</td>
-            <td data-title=""> <md-button class="md-raised md-mybutton" ng-click='discover(data.id, data.keywords)'>Discover</md-button></td>
+            <td data-title=""> <md-button class="md-raised md-mybutton" ng-click='discover(data.id, data.keywords,data.description)'>Discover</md-button></td>
 
         </tr>
         </tbody>
