@@ -1,0 +1,6 @@
+
+var DJANGO_SERVICE_URL='http://147.102.22.76:8000';
+
+var AUTH0_CLIENT_ID='xxx';
+var AUTH0_DOMAIN='yyy';
+var AUTH0_CALLBACK_URL='zzz';
