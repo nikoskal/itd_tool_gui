@@ -1,5 +1,5 @@
 <div id="top" align="center"><h2>Trends Discovery Results</h2>
-    <div>Query Description: {{description}}  - Searching term: {{keyword}}</div>
+    <div>Query Description: {{description}}  - Searching term: {{keyword}} - Processing duration: {{call_duration}} </div>
     <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="30px"></md-progress-circular>
 
 </div>
@@ -32,61 +32,65 @@
             </div>
         </div>
 
+    <div class="col-md-6"  style="background-color:white; margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div class="panel panel-default">
+            <div align="center"><h3>Rising Related Query Terms</h3></div>
+            <div class="table-responsive-vertical ">
 
-     <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-                   <div align="center"><h3>Keyword Volume</h3></div>
-             <div class="table-responsive-vertical">
-                <!-- exact table from live demo -->
+
                 <div class="span3">
                     <table md-table md-row-select multiple class="table-hover table-bordered" >
                         <thead md-head >
                         <tr md-row>
-                            <th md-column>Year</th>
-                            <th md-column >Month</th>
-                            <!--<th md-column >Search Count (rounded)</th>-->
-                            <th md-column>Search Count (rounded)</th>
+                            <th md-column>Term</th>
+                            <th md-column >Value </th>
                         </tr>
                         </thead>
                         <tbody md-body>
-
-
-                        <tr md-row ng-repeat="volumedata in discoverVolumeData | orderBy: '-count'  track by $index">
-                            <td md-cell>{{volumedata.year}}</td>
-                            <td md-cell>{{volumedata.month}}</td>
-                            <td md-cell>{{volumedata.count}}</td>
+                        <tr md-row ng-repeat="risingdata in discoverRisingData | orderBy : value">
+                            <td md-cell>{{risingdata.query}}</td>
+                            <td md-cell>{{risingdata.value}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-         </div>
         </div>
+    </div>
+
+
 </div>
 
 
 <div layout-gt-md="row">
-<div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-    <div align="center"><h3>Interest by Time</h3></div>
-    <div class="table-responsive-vertical">
-        <!-- exact table from live demo -->
-        <div class="span3">
-            <table md-table md-row-select multiple class="table-hover table-bordered" >
-                <thead md-head >
-                <tr md-row>
-                    <th md-column>Date</th>
-                    <th md-column >Interest (normalised 100)</th>
-                </tr>
-                </thead>
-                <tbody md-body>
-                <tr md-row ng-repeat="timedata in discoverTimeInterestData | orderBy: '-interest'  track by $index">
-                    <td md-cell>{{timedata.date}}</td>
-                    <td md-cell>{{timedata.interest}}</td>
-                </tr>
-                </tbody>
-            </table>
+
+    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center"><h3>Keyword Volume</h3></div>
+        <div class="table-responsive-vertical">
+            <!-- exact table from live demo -->
+            <div class="span3">
+                <table md-table md-row-select multiple class="table-hover table-bordered" >
+                    <thead md-head >
+                    <tr md-row>
+                        <th md-column>Year</th>
+                        <th md-column >Month</th>
+                        <!--<th md-column >Search Count (rounded)</th>-->
+                        <th md-column>Search Count (rounded)</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+
+
+                    <tr md-row ng-repeat="volumedata in discoverVolumeData | orderBy: '-count'  track by $index">
+                        <td md-cell>{{volumedata.year}}</td>
+                        <td md-cell>{{volumedata.month}}</td>
+                        <td md-cell>{{volumedata.count}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
         <div align="center"><h3>Popular Related Questions</h3></div>
@@ -100,12 +104,12 @@
                     </tr>
                     </thead>
                     <tbody md-body>
-                    <tr md-row ng-repeat="questionIs in discoverQuestionDataIs track by $index">
-                        <td md-cell>{{questionIs}}</td>
+                    <tr md-row ng-repeat="questions in discoverQuestionData track by $index">
+                        <td md-cell>{{questions}}</td>
                     </tr>
-                    <tr md-row ng-repeat="questionDid in discoverQuestionDataDid track by $index">
-                        <td md-cell>{{questionDid}}</td>
-                    </tr>
+                    <!--<tr md-row ng-repeat="questionDid in discoverQuestionDataDid track by $index">-->
+                        <!--<td md-cell>{{questionDid}}</td>-->
+                    <!--</tr>-->
 
                     </tbody>
                 </table>
@@ -116,8 +120,9 @@
 
 
 <div layout-gt-md="row">
+
     <div class="col-md-6 md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center"><h3>Region Interest</h3></div>
+        <div align="center"><h3>Interest by Region</h3></div>
         <div class="table-responsive-vertical">
             <!-- exact table from live demo -->
             <div class="span3">
@@ -140,24 +145,21 @@
     </div>
 
     <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center"><h3>Popular Related Tweets</h3>[Twitter API accepts 15 calls / 15 minutes]</div>
-        <!--<div>[15 calls every 15 minutes]</div>-->
+        <div align="center"><h3>Interest by Time</h3></div>
         <div class="table-responsive-vertical">
             <!-- exact table from live demo -->
             <div class="span3">
                 <table md-table md-row-select multiple class="table-hover table-bordered" >
                     <thead md-head >
                     <tr md-row>
-                        <th md-column>Text</th>
-                        <th md-column >Retweets - Favs</th>
-                        <th md-column >Date</th>
+                        <th md-column>Date</th>
+                        <th md-column >Interest (normalised 100)</th>
                     </tr>
                     </thead>
                     <tbody md-body>
-                    <tr md-row ng-repeat="tweet in discoverTweets track by $index">
-                        <td md-cell>{{tweet.text}}</td>
-                        <td md-cell>{{tweet.retweets}} - {{tweet.favs}}</td>
-                        <td md-cell>{{tweet.created}}</td>
+                    <tr md-row ng-repeat="timedata in discoverTimeInterestData | orderBy: '-interest'  track by $index">
+                        <td md-cell>{{timedata.date}}</td>
+                        <td md-cell>{{timedata.interest}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -167,6 +169,63 @@
 
 
 </div>
+
+
+
+<div layout-gt-md="row">
+
+
+
+    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center"><h3>Popular Related Tweets</h3>[Twitter API usually only serves tweets from the past week]</div>
+        <!--<div>[15 calls every 15 minutes]</div>-->
+        <div class="table-responsive-vertical">
+            <!-- exact table from live demo -->
+            <div class="span3">
+                <table md-table md-row-select multiple class="table-hover table-bordered" >
+                    <thead md-head >
+                    <tr md-row>
+                        <th md-column>User</th>
+                        <th md-column>Text</th>
+                        <th md-column >Retweets - Favs</th>
+                        <th md-column >Date</th>
+
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="tweet in discoverTweets track by $index">
+                        <td md-cell><a ng-href="https://twitter.com/intent/user?user_id={{tweet.id}}" target="_blank">{{tweet.user}}</a></td>
+                        <td md-cell>{{tweet.text}}</td>
+                        <td md-cell>{{tweet.retweets}} - {{tweet.favs}}</td>
+                        <td md-cell>{{tweet.created}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6"  style="background-color:white; margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div class="panel panel-default">
+            <div align="center"><h3>Gender Estimation based on Twitter messages</h3></div>
+            <div class="table-responsive-vertical ">
+                <div class="span3">
+                    <div ng-show="show_gender" style="font-size:15px; margin: 30px;">
+                    <p>Based on {{discoverTweetsGender.total_records}} tweets
+                    <p>male: {{discoverTweetsGender.male}}  with confidence level: {{discoverTweetsGender.male_conf}}</p>
+                    <p>female: {{discoverTweetsGender.female}}  with confidence level: {{discoverTweetsGender.female_conf}}</p>
+                        <p>unknown: {{discoverTweetsGender.unknown}}</p></div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 <div id="queries" align="center"><h3>Available Queries</h3></div>
 <div class="table-responsive-vertical md-whiteframe-z1">

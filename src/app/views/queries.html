@@ -11,7 +11,6 @@
             <th>Category</th>
             <th>Sources</th>
             <th>Time Period</th>
-            <th>Related Questions</th>
             <th>Targeted region(s)</th>
             <th>Actions</th>
         </tr>
@@ -22,21 +21,17 @@
             <td data-title="description">{{data.description}}</td>
             <td data-title="keywords">{{data.keywords}}</td>
             <td data-title="category">{{data.category}}</td>
-            <td data-title="sources">Twitter:{{data.twitter}}<br>Google:{{data.google}}<br>Youtube:{{data.youtube}}</td>
+            <td data-title="sources">Twitter:{{data.twitter}}<br>Google:{{data.google}}<br>Inference:{{data.inference}}<br>Related Questions:{{data.questions}}</td>
             <td data-title="period">{{data.start_date.substring(0, data.start_date.length - 9)}} <br>until<br> {{data.end_date.substring(0, data.end_date.length - 9)}}</td>
-
             <ion-icon name="checkmark" color="secondary" item-right *ngIf="item.status"></ion-icon>
-
-
-            <td data-title="questions">{{data.questions}}</td>
             <td data-title="location">{{data.location}}</td>
 
             <td data-title="">
-                <a href="http://147.102.22.76/#/trends#queries" target="_self"><md-button class="md-raised" >Discover</md-button></a>
+                <a href="/#/trends#queries" target="_self"><md-button class="md-raised" >Discover</md-button></a>
                 <md-button ng-disabled="true" class="md-raised" ng-click='edit(data.id)'>View/Edit</md-button>
                 <md-button class="md-raised" ng-click='deleteQuery(data.id)'>Delete</md-button>
             </td>
-
+            
         </tr>
         </tbody>
     </table>
@@ -131,7 +126,7 @@
                                 </div>
                                 <div layout-sm="row">
 
-                                    <md-checkbox ng-disabled="true" ng-model="vm.newquery.inference">
+                                    <md-checkbox ng-model="vm.newquery.inference">
                                         <label>Enable inference</label>
                                     </md-checkbox>
 

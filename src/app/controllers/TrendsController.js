@@ -18,15 +18,16 @@
       $scope.discoverRelatedData = [];
       $scope.discoverVolumeData = [];
       $scope.discoverTimeInterestData = [];
-      $scope.discoverQuestionDataIs = [];
-      $scope.discoverQuestionDataDid = [];
+      $scope.discoverQuestionData = [];
       $scope.discoverTweets = [];
-      vm.queriesData = [];
-      vm.activated = false;
       $scope.isLoading =  false;
       $scope.discoverRegionInterestData = [];
       $scope.keyword = {};
       $scope.description = {};
+      $scope.discoverRisingData = [];
+      $scope.discoverTweets = [];
+      vm.queriesData = [];
+      vm.activated = false;
 
 
       // $scope.reverseSortRegion = false;
@@ -46,14 +47,16 @@
       $scope.clearalldata = function() {
           $scope.discoverKwdData = [];
           $scope.discoverRelatedData = [];
+          $scope.discoverRisingData = [];
           $scope.discoverVolumeData = [];
           $scope.discoverTimeInterestData = [];
-          $scope.discoverQuestionDataIs = [];
-          $scope.discoverQuestionDataDid = [];
+          $scope.discoverQuestionData = [];
           $scope.discoverTweets = [];
           $scope.discoverRegionInterestData = [];
           $scope.keyword = {};
           $scope.description = {};
+
+          $scope.call_duration = {};
       };
 
       function retrieveAllQueries() {
@@ -79,46 +82,41 @@
           $location.hash('top');
           $anchorScroll();
           console.log(" scrolled?");
+          $scope.show_gender = false;
 
           $http.get(DJANGO_SERVICE_URL+'/discover/'+queryId)
               .then(function successCallback(response) {
                   $scope.isLoading = false;
                   console.log("inside success discover response", response );
-
-
                   $scope.discoverRelatedData = response.data.related_queries_list.top;
+                  $scope.discoverRisingData = response.data.related_queries_list.rising;
                   $scope.discoverVolumeData = response.data.volume_list;
                   $scope.discoverTimeInterestData = response.data.time_interest_list;
                   $scope.discoverRegionInterestData = response.data.interest_over_region;
-                  $scope.discoverQuestionDataIs = response.data.autocomplete[0];
-                  $scope.discoverQuestionDataDid = response.data.autocomplete[1];
-                  $scope.discoverTweets = response.data.tweets;
+                  $scope.discoverQuestionData = response.data.autocomplete;
+                  $scope.discoverTweets = response.data.tweets.popular_tweets;
+                  $scope.discoverTweetsGender = response.data.tweets.tweet_gender_prob;
 
+                  if( $scope.discoverTweetsGender ) {
+                      $scope.show_gender = true;
+                  }
+
+                  $scope.call_duration = response.data.time +" sec";
                   console.log("query related_kwd_list: ", $scope.discoverRelatedData);
+                  console.log("query rising: ", $scope.discoverRisingData);
                   console.log("query volume: ", $scope.discoverVolumeData);
                   console.log("query discoverTimeInterestData: ", $scope.discoverTimeInterestData);
-                  console.log("query discoverTimeInterestData: ", $scope.discoverRegionInterestData);
-                  console.log("query discoverQuestionDataIs: ", $scope.discoverQuestionDataIs);
-                  console.log("query discoverQuestionDataIs: ", $scope.discoverQuestionDataDid);
+                  console.log("query discoverRegionInterestData: ", $scope.discoverRegionInterestData);
+                  console.log("query discoverQuestionData: ", $scope.discoverQuestionData);
+                  console.log("query discoverTweets: ", $scope.discoverTweets);
+                  console.log("query tweet_gender_prob: ", $scope.discoverTweetsGender);
+                  console.log("query call_duration: ", $scope.call_duration);
 
                   }, function errorCallback(response) {
                   console.log("inside error discover response", response );
                   $scope.isLoading = false;
               });
 
-
-          console.log("query volume");
-
-          // $http.get('http://127.0.0.1:8000/google-adwords/snowden/location/Unitedstates')
-          //     .then(function successCallback(response) {
-          //         console.log("inside success  discoverVolumeData response", response );
-          //         $scope.discoverVolumeData = response;
-          //     }, function errorCallback(response) {
-          //         console.log("inside error discoverVolumeData response", response );
-          //     });
       };
-
-
   }
-
 })();
