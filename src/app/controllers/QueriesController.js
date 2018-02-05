@@ -148,7 +148,12 @@
             }
         };
 
+        $scope.reloadRoute = function() {
 
+            // console.log("calling  reload " );
+            // $route.reload();
+            window.location.reload(true);
+        };
 
 
         function retrieveAllQueries() {
@@ -211,10 +216,10 @@
                 url: myurl
             }).then(function successCallback(response) {
                 console.log("inside success delete response", response );
-                retrieveAllQueries();
+                $scope.reloadRoute();
             }, function errorCallback(response) {
                 console.log("inside error delete response", response );
-                retrieveAllQueries();
+                $scope.reloadRoute();
             });
             console.log("delete  retrieveAllQueries");
 
