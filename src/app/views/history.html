@@ -8,36 +8,23 @@
 
 <div class="table-responsive-vertical md-whiteframe-z1">
     <div class="span4">
-    <table id="table" class="table table-hover table-bordered">
+    <table id="table" class="table table-hover table-bordered table-scroll">
         <thead>
         <tr>
             <th>Description</th>
             <th>Keyword</th>
             <th>Date of Discovery</th>
             <th>Actions</th>
-
-
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="history in vm.historyList ">
             <td data-title="query_desc">{{history.query_desc}}</td>
             <td data-title="keyword">{{history.keyword}}</td>
-            <!--<td data-title="date">{{history.execution_date}}</td>-->
             <td data-title="date">{{history.execution_date.substring(0,history.execution_date.length-9)}}</td>
-
-
-
-            <!--<td data-title="keyword(s)">{{history.results}}</td>-->
-            <!--<td data-title="period">{{data.start_date.substring(0, data.start_date.length - 9)}} {{data.end_date.substring(0, data.end_date.length - 9)}}</td>-->
-            <!--<ion-icon name="checkmark" color="secondary" item-right *ngIf="item.status"></ion-icon>-->
-            <!--<td data-title="location">{{data.location}}</td>-->
             <td data-title="">
                 <md-button class="md-raised md-mybutton" ng-click='retrieveHistory(history.id)'>Show</md-button>
-                <!--<md-button class="md-raised" ng-click='retrieveHistory(history.id)'>Delete</md-button>-->
                 <md-button class="md-raised md-mybutton" ng-click='deleteHistory(history.id)'>Delete</md-button></td>
-
-
         </tr>
         </tbody>
     </table>
@@ -55,9 +42,12 @@
 
 </div>
 
-
+<!--Interest by Time-->
 <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-    <div align="center"><h3>Interest by Time graph</h3></div>
+    <div align="center"><h3>Interest by Time graph</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">Numbers represent search interest relative to the highest point on the chart for the given region and time.
+        A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means that there was not enough data for this term.[Google]
+    </div>
 
 
     <md-content layout="row" layout-align="center center">
@@ -66,70 +56,37 @@
 
 </div>
 
+<!--Keyword Volume-->
+<div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center"><h3>Keyword Volume</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">Represents the (approximated) number of searches on this keyword idea (as available for the past twelve months), targeted to the specified region.
+        If there is no data then the value is null.</div>
+    <md-content layout="row" layout-align="center center">
+        <nvd3 options="volumeChartOptions" data="volumeChartLineData"></nvd3>
+    </md-content>
 
-<div layout-gt-md="row">
+</div>
 
-    <div class="col-md-6 md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center"><h3>Interest by Region</h3></div>
-        <div class="table-responsive-vertical">
-            <!-- exact table from live demo -->
-            <div class="span3">
-                <table md-table md-row-select multiple class="table-hover table-bordered"  >
-                    <thead md-head >
-                    <tr md-row>
-                        <th md-column>Region</th>
-                        <th md-column>Interest (normalised 100)</th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row ng-repeat="regiondata in historyRegionInterestData | orderBy:'-interest' track by $index">
-                        <td md-cell>{{regiondata.region}}</td>
-                        <td md-cell>{{regiondata.interest}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+
+<!--Interest by Region-->
+<div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center" style="margin: 20px; "><h3>Interest by Region</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">See in which location your term was most popular during the specified time frame. Values are calculated on a scale from 0 to 100, where 100 is the location with the most popularity as a fraction of total searches in that location, a value of 50 indicates a location which is half as popular. A value of 0 indicates a location where there was not enough data for this term.
+        <br>Note: A higher value means a higher proportion of all queries, not a higher absolute query count. So a tiny country where 80% of the queries are for 'bananas' will get twice the score of a giant country where only 40% of the queries are for 'bananas'. [Google]</div>
+
+    <md-content layout="row" layout-align="center center">
+        <nvd3 options="regionChartOptions" data="regionChartData"></nvd3>
+    </md-content>
 </div>
 
 
 
 <div layout-gt-md="row">
-
-    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center"><h3>Keyword Volume</h3></div>
-        <div class="table-responsive-vertical">
-            <!-- exact table from live demo -->
-            <div class="span3">
-                <table md-table md-row-select multiple class="table-hover table-bordered" >
-                    <thead md-head >
-                    <tr md-row>
-                        <th md-column>Year</th>
-                        <th md-column >Month</th>
-                        <!--<th md-column >Search Count (rounded)</th>-->
-                        <th md-column>Search Count (rounded)</th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-
-
-                    <tr md-row ng-repeat="volumedata in historyVolumeData | orderBy: '-count'  track by $index">
-                        <td md-cell>{{volumedata.year}}</td>
-                        <td md-cell>{{volumedata.month}}</td>
-                        <td md-cell>{{volumedata.count}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div class="md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
         <div align="center"><h3>Popular Questions</h3></div>
         <div class="table-responsive-vertical">
             <!-- exact table from live demo -->
-            <div class="span3">
+            <div class="span5">
                 <table md-table md-row-select multiple class="table-hover table-bordered" >
                     <thead md-head >
                     <tr md-row>
@@ -151,101 +108,51 @@
 </div>
 
 
-<div layout-gt-md="row">
+<div class="md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center"><h3>Popular Related Tweets</h3>[Twitter API only serves tweets from the past week]</div>
 
-    <div class="col-md-6"  style="background-color:white; margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div class="panel panel-default">
-            <div align="center"> <h3>Top Related Query Terms </h3> <span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
-            <div class="popover" ng-show="popoverIsVisible1">These results are terms that are most frequently searched
-                with the term you entered in
-                the same search session, within the chosen category, country, or region.</div>
+    <div class="table-responsive-vertical">
 
-            <div class="table-responsive-vertical ">
-                <!-- exact table from live demo -->
-                <div class="span3">
-                    <table md-table md-row-select multiple class="table-hover table-bordered" >
-                        <thead md-head >
-                        <tr md-row>
-                            <th md-column>Query</th>
-                            <th md-column >Value (normalised 100)</th>
-                        </tr>
-                        </thead>
-                        <tbody md-body>
-                        <tr md-row ng-repeat="relateddata in historyRelatedData | orderBy : value">
-                            <td md-cell>{{relateddata.query}}</td>
-                            <td md-cell>{{relateddata.value}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="span5">
+            <table md-table md-row-select multiple class="table-hover table-bordered" >
+                <thead md-head >
+                <tr md-row>
+                    <th md-column>User</th>
+                    <th md-column>Text</th>
+                    <th md-column >Retweets - Likes</th>
+                    <th md-column >Date</th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row ng-repeat="tweet in historyTweets track by $index">
+                    <td md-cell><a ng-href="https://twitter.com/intent/user?user_id={{tweet.id}}" target="_blank">{{tweet.user}}</a></td>
+                    <td md-cell>{{tweet.text}}</td>
+                    <td md-cell>{{tweet.retweets}} - {{tweet.favs}}</td>
+                    <td md-cell>{{tweet.created}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div class="col-md-6"  style="background-color:white; margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div class="panel panel-default">
-            <div align="center"> <h3>Rising Related Query Terms </h3> <span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
-
-            <div class="popover" ng-show="popoverIsVisible2">Rising Query Terms are terms that were searched for with the term you entered, which had the most significant growth in volume in the requested time period. For each rising search term, you’ll see a percentage of the term’s growth compared to the previous time period. If you see “Breakout” instead of a percentage, it means that the search term grew by more than 5000%.</div>
-            <div class="table-responsive-vertical ">
-
-
-                <div class="span3">
-                    <table md-table md-row-select multiple class="table-hover table-bordered" >
-                        <thead md-head >
-                        <tr md-row>
-                            <th md-column>Term</th>
-                            <th md-column >Value </th>
-                        </tr>
-                        </thead>
-                        <tbody md-body>
-                        <tr md-row ng-repeat="risingdata in historyRisingData | orderBy : value">
-                            <td md-cell>{{risingdata.query}}</td>
-                            <td md-cell>{{risingdata.value}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 </div>
 
 
-
-
-
 <div layout-gt-md="row">
 
-    <div class="md-whiteframe2dp" style="background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center"><h3>Popular Related Tweets</h3>[Twitter API only serves tweets from the past week]</div>
 
-        <div class="table-responsive-vertical">
-
-            <div class="span3">
-                <table md-table md-row-select multiple class="table-hover table-bordered" >
-                    <thead md-head >
-                    <tr md-row>
-                        <th md-column>User</th>
-                        <th md-column>Text</th>
-                        <th md-column >Retweets - Favs</th>
-                        <th md-column >Date</th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row ng-repeat="tweet in historyTweets track by $index">
-                        <td md-cell><a ng-href="https://twitter.com/intent/user?user_id={{tweet.id}}" target="_blank">{{tweet.user}}</a></td>
-                        <td md-cell>{{tweet.text}}</td>
-                        <td md-cell>{{tweet.retweets}} - {{tweet.favs}}</td>
-                        <td md-cell>{{tweet.created}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+        <div align="center" style="margin: 20px; "><h3>Sentiment Estimation based on related Tweets and Retweets)</h3>[Twitter API only serves tweets from the past week]
         </div>
+        <md-content layout="row" layout-align="center center">
+            <nvd3 options="sentimentChartOptions" data="sentimentVisitorsChartData"></nvd3>
+        </md-content>
+
+        <div ng-show="show_sentiment" align="center" style="margin: 20px;">Average Scores<br>
+            Possitive Tweets Score [max score is 1]: {{average_sentiment.average_score_pos}},<br>
+            Negative Tweets Score [min score is -1]: {{average_sentiment.average_score_neg}}</div>
     </div>
+
+
 
     <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
         <div align="center" style="margin: 20px; "><h3>Gender Estimation based on related Tweets</h3>[Twitter API only serves tweets from the past week]
@@ -253,15 +160,30 @@
         <md-content layout="row" layout-align="center center">
             <nvd3 options="genderChartOptions" data="genderVisitorsChartData"></nvd3>
         </md-content>
-        <div ng-show="show_gender" align="center" style="margin: 20px;"> Total Tweets processed: {{historyTweetsGender.total_records}}</div>
+        <!--<div ng-show="show_gender" align="center" style="margin: 20px;"> Total Tweets processed: {{historyTweetsGender.total_records}}</div>-->
         <div ng-show="show_gender" align="center" style="margin: 20px;"> Confidence level:<br>
             Male:{{historyTweetsGender.male_conf}}, Female:{{historyTweetsGender.female_conf}}</div>
-
-        <!--</panel-widget>-->
     </div>
 </div>
 
 
 
+<div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center" style="margin: 20px; "><h3>Top Related Terms</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">These results are terms that are most frequently searched
+        with the term you entered in
+        the same search session, within the chosen category, country, or region.</div>
 
+    <md-content layout="row" layout-align="center center">
+        <nvd3 options="graphTopChartOptions" data="graphTopChartData"></nvd3>
+    </md-content>
+</div>
 
+<div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
+    <div align="center" style="margin: 20px; "><h3>Rising Related Terms</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">Rising Query Terms are terms that were searched for with the term you entered, which had the most significant growth in volume in the requested time period. For each rising search term, you’ll see a percentage of the term’s growth compared to the previous time period.</div>
+
+    <md-content layout="row" layout-align="center center">
+        <nvd3 options="graphRisingChartOptions" data="graphRisingChartData"></nvd3>
+    </md-content>
+</div>

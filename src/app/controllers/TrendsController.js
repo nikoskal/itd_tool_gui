@@ -30,7 +30,6 @@
       vm.activated = false;
       $scope.discoverTweetsGender  = {};
 
-
       $scope.genderChartOptions = {
           chart: {
               type: 'pieChart',
@@ -97,9 +96,6 @@
 
           $scope.show_gender = false;
 
-
-
-
           $http.get(DJANGO_SERVICE_URL+'/discover/'+queryId)
               .then(function successCallback(response) {
                   $scope.isLoading = false;
@@ -113,16 +109,15 @@
                   $scope.discoverTweets = response.data.tweets.popular_tweets;
                   $scope.discoverTweetsGender = response.data.tweets.tweet_gender_prob;
 
-                  if( $scope.discoverTweetsGender ) {
+                  if( typeof $scope.historyTweetsGender !== 'undefined' ) {
                       $scope.show_gender = true;
+                      console.log("!!query tweet_gender_prob: ", $scope.discoverTweetsGender);
+                      console.log("!!query tweet_gender_prob male: ", $scope.discoverTweetsGender.male);
+                      console.log("!!query tweet_gender_prob female: ", $scope.discoverTweetsGender.female);
+                      console.log("!!query tweet_gender_prob unknown: ", $scope.discoverTweetsGender.unknown);
+                      $scope.populate_pie($scope.discoverTweetsGender.male ,$scope.discoverTweetsGender.female,
+                          $scope.discoverTweetsGender.unknown, $scope.discoverTweetsGender.total_records);
                   }
-                  console.log("!!query tweet_gender_prob: ", $scope.discoverTweetsGender);
-                  console.log("!!query tweet_gender_prob male: ", $scope.discoverTweetsGender.male);
-                  console.log("!!query tweet_gender_prob female: ", $scope.discoverTweetsGender.female);
-                  console.log("!!query tweet_gender_prob unknown: ", $scope.discoverTweetsGender.unknown);
-                  $scope.populate_pie($scope.discoverTweetsGender.male ,$scope.discoverTweetsGender.female,
-                  $scope.discoverTweetsGender.unknown, $scope.discoverTweetsGender.total_records);
-
 
                   $scope.call_duration = response.data.time +" sec";
                   console.log("query related_kwd_list: ", $scope.discoverRelatedData);
