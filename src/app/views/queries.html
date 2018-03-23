@@ -1,9 +1,27 @@
-<div align="center"><h2>Query Descriptions</h2></div>
+<div id="top" align="center"><h2>Query Descriptions</h2>
 
+
+    <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="30px"></md-progress-circular>
+    <div ng-show="isLoading">
+        <div><b>Discovering trends for :</b> {{description}}  - <b>Searching term:</b> {{keyword}}</div>
+        <br>
+        This might take some minutes depending on the Query parameters.
+        <br>
+        You can check the History page in order to view the results when they are ready.
+
+    </div>
+    <div ng-show="isCompleted">
+        <div><b>Discovering trends for :</b> {{description}}  - <b>Searching term:</b> {{keyword}} - <b>Processing duration:</b> {{call_duration}} </div>
+        <br>
+        Discovery completed successfully. You can check the History page in order to view the results.
+    </div>
+
+</div>
+<br>
 <!--<p>login </p>-->
 <div class="table-responsive-vertical md-whiteframe-z1">
     <div class="span4">
-    <table id="table" class="table table-hover table-bordered">
+    <table id="table" class="table table-hover table-bordered table-scroll">
         <thead>
         <tr>
             <th>ID</th>
@@ -29,7 +47,8 @@
 
             <td data-title="">
                 <!--<a href="/#/trends#queries" target="_self"><md-button class="md-raised" >Discover</md-button></a>-->
-                <md-button ng-disabled="true" class="md-raised" ng-click='edit(data.id)'>Edit</md-button>
+                <!--<md-button ng-disabled="true" class="md-raised" ng-click='edit(data.id)'>Edit</md-button>-->
+                <md-button class="md-raised md-mybutton" ng-click='discover(data.id, data.keywords,data.description)'>Discover</md-button>
                 <md-button class="md-raised" ng-click='deleteQuery(data.id)'>Delete</md-button>
             </td>
             
@@ -115,17 +134,17 @@
                                             </md-input-container>
                                         </div>
                                 </div>
+                                <!--style="background-color:white; margin: 30px; padding:30px; box-shadow: 10px 10px 5px grey;"-->
                                 <div layout-sm="row">
-                                    <label>Sources:</label>
+
+                                    <label>Information Sources:</label>
                                         <md-checkbox ng-model="vm.newquery.twitter">
                                             <label>Twitter</label>
                                         </md-checkbox>
+                                        &nbsp &nbsp
                                         <md-checkbox ng-model="vm.newquery.google">
                                             <label>Google</label>
                                         </md-checkbox>
-                                    <md-checkbox ng-disabled="true" ng-model="vm.newquery.youtube">
-                                        <label>YouTube</label>
-                                    </md-checkbox>
                                 </div>
                                 <div layout-sm="row">
 

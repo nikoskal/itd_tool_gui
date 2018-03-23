@@ -347,6 +347,38 @@
       };
 
 
+      $scope.exportHistory = function(queryId) {
+          console.log("1 inside success exportHistory response ",queryId );
+
+          window.open(DJANGO_SERVICE_URL+'/history_export/'+queryId+'/', "_blank");
+
+      };
+
+
+
+          // $http.get(DJANGO_SERVICE_URL+'/history_export/'+queryId+'/', {
+          //     headers : {'Content-type' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
+          //     responseType: 'arraybuffer' })
+          //     .then(function successCallback(response) {
+          //         console.log("2 inside success exportHistory response ",response );
+          //         var file = new Blob([ response ], {
+          //             type : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          //         });
+          //
+          //         var fileURL = URL.createObjectURL(file);
+          //         var a         = document.createElement('a');
+          //         a.href        = fileURL;
+          //         a.target      = '_blank';
+          //         a.download    = 'yourfilename.xlsx';
+          //         document.body.appendChild(a);
+          //         a.click();
+          //
+          //         }, function errorCallback(response) {
+          //         console.log("3 inside error exportHistory response ", response );
+          //     });
+
+      // };
+      // $http.post('Api/DownloadURL',$scope.data,{responseType:'arraybuffer'})
 
 
       $scope.retrieveHistory = function(queryId) {
@@ -405,6 +437,11 @@
           $scope.popoverIsVisible2 = false;
       };
 
+      $scope.getReport = function(queryId) {
+          console.log("getReport ",queryId );
+          var downloadPath = DJANGO_SERVICE_URL+'/history_export/'+queryId+'/';
+          window.open(downloadPath, '_self', '');
+      };
 
   }
 })();

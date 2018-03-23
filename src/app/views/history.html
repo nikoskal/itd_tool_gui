@@ -24,7 +24,9 @@
             <td data-title="date">{{history.execution_date.substring(0,history.execution_date.length-9)}}</td>
             <td data-title="">
                 <md-button class="md-raised md-mybutton" ng-click='retrieveHistory(history.id)'>Show</md-button>
-                <md-button class="md-raised md-mybutton" ng-click='deleteHistory(history.id)'>Delete</md-button></td>
+                <md-button class="md-raised md-mybutton" ng-click='deleteHistory(history.id)'>Delete</md-button>
+                <md-button class="md-raised md-mybutton" ng-click='exportHistory(history.id)'>Download</md-button>
+
         </tr>
         </tbody>
     </table>
@@ -153,7 +155,6 @@
     </div>
 
 
-
     <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
         <div align="center" style="margin: 20px; "><h3>Gender Estimation based on related Tweets</h3>[Twitter API only serves tweets from the past week]
         </div>
@@ -165,8 +166,6 @@
             Male:{{historyTweetsGender.male_conf}}, Female:{{historyTweetsGender.female_conf}}</div>
     </div>
 </div>
-
-
 
 <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
     <div align="center" style="margin: 20px; "><h3>Top Related Terms</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>

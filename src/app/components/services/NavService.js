@@ -19,11 +19,11 @@
             icon: 'youtube_searched_for',
             sref: '.queries'
         },
-      {
-        name: 'Trends',
-        icon: 'trending_up',
-        sref: '.trends'
-      },
+      // {
+      //   name: 'Trends',
+      //   icon: 'trending_up',
+      //   sref: '.trends'
+      // },
         {
             name: 'History',
             icon: 'history',

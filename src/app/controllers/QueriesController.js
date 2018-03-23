@@ -3,20 +3,22 @@
     angular
         .module('app')
         .controller('QueriesController', [
-            '$http','$scope','$location',
+            '$http','$scope','$location', '$anchorScroll',
             QueriesController
         ]);
 
 
 
 
-    function QueriesController($http, $scope, $location) {
+    function QueriesController($http, $scope, $location, $anchorScroll) {
         var vm = this;
         vm.queriesData  =[];
         vm.postQuery = postNewQuery;
         $scope.isLoading =  false;
         vm.topics = {};
         vm.clicktoopen = {};
+        $scope.isLoading =  false;
+        $scope.isCompleted =  false;
 
         $scope.categories = [
             {name:"All categories",
@@ -135,6 +137,15 @@
 
 
 
+        $scope.clearusermsg = function() {
+            $scope.isLoading =  false;
+            $scope.isCompleted =  false;
+            $scope.keyword = {};
+            $scope.description = {};
+            $scope.call_duration = {};
+
+        };
+
         $scope.getCategoryName = function(catid){
 
             // console.log("find  getCategoryName",  catid);
@@ -188,10 +199,12 @@
             $http.post(DJANGO_SERVICE_URL+'/query-parameters/', vm.newquery, config)
                 .then(function successCallback(response) {
                     console.log("inside success post response", response );
-                    retrieveAllQueries();
+                    // retrieveAllQueries();
+                    $scope.reloadRoute();
                 }, function errorCallback(response) {
                     console.log("inside error post response", response );
-                    retrieveAllQueries();
+                    // retrieveAllQueries();
+                    $scope.reloadRoute();
                 });
 
         }
@@ -222,9 +235,7 @@
                 $scope.reloadRoute();
             });
             console.log("delete  retrieveAllQueries");
-
         };
-
 
 
         $scope.gettopics= function(keyword){
@@ -232,7 +243,6 @@
             vm.clicktoopen = {};
             $scope.isLoading = true;
             // if keyword contains spaces change them with _
-
 
             vm.topics = {};
             var myurl = DJANGO_SERVICE_URL+'/gtrends-keyword-topic/'+keyword+'/';
@@ -252,46 +262,32 @@
             }, function errorCallback(response) {
                 console.log("inside error gettopics, response:", response );
             });
-
             vm.activated = false;
         };
 
+        $scope.discover = function(queryId, keyword, description) {
 
-        // $scope.discover = function(queryId) {
-        //
-        //     console.log("inside discover redirect",  queryId);
-        //     $location.url('http://localhost:3000/#!/skata');
-        //
-        // };
-        // $scope.discover = function(queryId) {
-        //
-        //     console.log("inside discover",  queryId);
-        //
-        //     // var config = {
-        //     //     headers : {
-        //     //         'Content-Type': 'application/json'
-        //     //     }
-        //     // };
-        //
-        //     // $http.post('http://147.102.22.76:8000/query-parameters/', vm.newquery, config)
-        //     $http.get('http://127.0.0.1:8000/discover/'+queryId)
-        //         .then(function successCallback(response) {
-        //             console.log("inside success discover response", response );
-        //         }, function errorCallback(response) {
-        //             console.log("inside error discover response", response );
-        //         });
-        //
-        //     // $http.get('http://127.0.0.1:8000/discover/'+queryId).then(function (response) {
-        //     //     vm.discoverData = response.data;
-        //     // });
-        //
-        //
-        // };
+            $scope.clearusermsg()
+            console.log("inside discover",  queryId);
+            // $scope.clearalldata();
+            $scope.isLoading = true;
+            $scope.keyword = keyword;
+            $scope.description = description;
 
-
-
-
-
-
+            $location.hash('top');
+            $anchorScroll();
+            // $scope.show_gender = false;
+            $http.get(DJANGO_SERVICE_URL+'/discover/'+queryId)
+                .then(function successCallback(response) {
+                    // $scope.isLoading = false;
+                    $scope.isLoading = false;
+                    $scope.isCompleted = true;
+                    console.log("inside success discover response", response );
+                    $scope.call_duration = response.data.time +" sec";
+                }, function errorCallback(response) {
+                    console.log("inside error discover response", response );
+                    $scope.isLoading = false;
+                });
+        };
     }
 })();
