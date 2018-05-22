@@ -22,6 +22,11 @@
     vm.showSimpleToast = showSimpleToast;
     vm.toggleRightSidebar = toggleRightSidebar;
     // vm.trendqueries = getTrendQueries;
+      console.log("MainController 1:renewToken");
+      vm.auth.renewToken();
+      console.log("MainController 2:renewToken");
+
+
 
     navService
       .loadAllItems()

@@ -25,7 +25,7 @@
       //   sref: '.trends'
       // },
         {
-            name: 'History',
+            name: 'Results',
             icon: 'history',
             sref: '.history'
         }

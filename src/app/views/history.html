@@ -13,6 +13,7 @@
         <tr>
             <th>Description</th>
             <th>Keyword</th>
+            <th>Time Period</th>
             <th>Date of Discovery</th>
             <th>Actions</th>
         </tr>
@@ -21,20 +22,17 @@
         <tr ng-repeat="history in vm.historyList ">
             <td data-title="query_desc">{{history.query_desc}}</td>
             <td data-title="keyword">{{history.keyword}}</td>
+            <td data-title="period">{{history.start_date.substring(0, history.start_date.length - 9)}} <br>until<br> {{history.end_date.substring(0, history.end_date.length - 9)}}</td>
             <td data-title="date">{{history.execution_date.substring(0,history.execution_date.length-9)}}</td>
-            <td data-title="">
-                <md-button class="md-raised md-mybutton" ng-click='retrieveHistory(history.id)'>Show</md-button>
-                <md-button class="md-raised md-mybutton" ng-click='deleteHistory(history.id)'>Delete</md-button>
-                <md-button class="md-raised md-mybutton" ng-click='exportHistory(history.id)'>Download</md-button>
-
+            <td >
+                <md-button class="md-raised md-mybutton" ng-click='retrieveHistory(history.id)'>Show</md-button> <md-button class="md-raised md-mybutton" ng-click='deleteHistory(history.id)'>Delete</md-button>
+                <md-button class="md-raised md-mybutton" ng-click='exportHistory(history.id)'>Download</md-button><md-button class="md-raised md-mybutton" ng-click='sendOCD(history.keyword,history.start_date.substring(0, history.start_date.length - 9),history.end_date.substring(0, history.end_date.length - 9))'>Query OCD</md-button>
+                </td >
         </tr>
         </tbody>
     </table>
     </div>
 </div>
-
-
-
 
 
 
@@ -143,14 +141,14 @@
 
 
     <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-        <div align="center" style="margin: 20px; "><h3>Sentiment Estimation based on related Tweets and Retweets)</h3>[Twitter API only serves tweets from the past week]
+        <div align="center" style="margin: 20px; "><h3>Sentiment Estimation based on related Tweets (and Retweets)</h3>[Twitter API only serves tweets from the past week]
         </div>
         <md-content layout="row" layout-align="center center">
             <nvd3 options="sentimentChartOptions" data="sentimentVisitorsChartData"></nvd3>
         </md-content>
 
         <div ng-show="show_sentiment" align="center" style="margin: 20px;">Average Scores<br>
-            Possitive Tweets Score [max score is 1]: {{average_sentiment.average_score_pos}},<br>
+            Positive Tweets Score [max score is 1]: {{average_sentiment.average_score_pos}},<br>
             Negative Tweets Score [min score is -1]: {{average_sentiment.average_score_neg}}</div>
     </div>
 
@@ -168,10 +166,10 @@
 </div>
 
 <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-    <div align="center" style="margin: 20px; "><h3>Top Related Terms</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div align="center" style="margin: 20px; "><h3>Related Terms (All time)</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
     <div class="popover" ng-show="popoverIsVisible1">These results are terms that are most frequently searched
         with the term you entered in
-        the same search session, within the chosen category, country, or region.</div>
+        the same search session, within the chosen category, country, or region. Line thickness is proportional to terms correlation.</div>
 
     <md-content layout="row" layout-align="center center">
         <nvd3 options="graphTopChartOptions" data="graphTopChartData"></nvd3>
@@ -179,8 +177,9 @@
 </div>
 
 <div class="md-whiteframe2dp" style=" background-color:white;margin: 30px;  box-shadow: 10px 10px 5px grey;">
-    <div align="center" style="margin: 20px; "><h3>Rising Related Terms</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
-    <div class="popover" ng-show="popoverIsVisible1">Rising Query Terms are terms that were searched for with the term you entered, which had the most significant growth in volume in the requested time period. For each rising search term, you’ll see a percentage of the term’s growth compared to the previous time period.</div>
+    <div align="center" style="margin: 20px; "><h3>Related Terms (Recent)</h3><span ng-mouseover="showPopover()" ng-mouseleave="hidePopover()"> (more info)</span></div>
+    <div class="popover" ng-show="popoverIsVisible1">Recent Related Terms are terms that were searched for along with the specified  keyword you entered, which had the most <b>significant growth</b> in volume in the <b>requested time period</b>.
+    <br>Line thickness is proportional to terms correlation.</div>
 
     <md-content layout="row" layout-align="center center">
         <nvd3 options="graphRisingChartOptions" data="graphRisingChartData"></nvd3>

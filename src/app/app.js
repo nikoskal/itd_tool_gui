@@ -26,23 +26,12 @@
         angularAuth0Provider
     ) {
         angularAuth0Provider.init({
-            // clientID: 'S1fLx52SDwQcS1Lt9esgsRZ16ucc1DTm',
-            // domain: 'producer-account.eu.auth0.com',
-            // responseType: 'token id_token',
-            // // redirectUri: 'http://localhost:3000/#!/callback',
-            // scope: 'openid',
-            // clientSecret: '_mxPRQeVcUNE7xrQiELsIbHE5B-WIB_V64miDBUYrq31jAfHwiJXw3E6rp27_wkl'
-            // domain: 'itdtool.eu.auth0.com',
-            // clientID: 'JtvWDJ0GhxFjeQH5Unt4dfanGzIWip8j',
-            // clientSecret: 'd8ZanNotEKgM9aVC-RwHOvlc7c-kdo9yoRD0QZRkc5tmvUDeGjzHSOG-vkVAJqDA',
-            // responseType: 'token id_token',
-            // redirectUri:'http://localhost:3000/#/callback'
 
             domain: AUTH0_DOMAIN,
             clientID: AUTH0_CLIENT_ID,
-            // clientSecret: '_mxPRQeVcUNE7xrQiELsIbHE5B-WIB_V64miDBUYrq31jAfHwiJXw3E6rp27_wkl',
             responseType: 'token id_token',
-            redirectUri: AUTH0_CALLBACK_URL
+            redirectUri: AUTH0_CALLBACK_URL,
+            scope: 'openid profile'
 
         });
         $urlRouterProvider.otherwise('/');

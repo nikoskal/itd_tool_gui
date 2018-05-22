@@ -3,23 +3,24 @@
   angular
     .module('app')
     .controller('HistoryController', [
-        '$http','$scope','$location','$anchorScroll',
+        '$http','$scope','$location','$anchorScroll','authService',
         HistoryController
       
     ]);
 
+  HistoryController.$inject = ['authService'];
   var vm = this;
   vm.totalItems = 0;
 
 
 
-  function HistoryController($http, $scope, $location, $anchorScroll) {
+  function HistoryController($http, $scope, $location, $anchorScroll, authService) {
     var vm = this;
-      // $scope.discoverKwdData = [];
-      // $scope.discoverVolumeData = [];
-      // $scope.discoverTimeInterestData = [];
+
       vm.historyList = [];
       vm.activated = false;
+      vm.auth = authService;
+
       $scope.historyKwdData = [];
       $scope.historyRelatedData = [];
       $scope.historyVolumeData = [];
@@ -41,6 +42,12 @@
       $scope.regionChartData = [];
       $scope.graphTopChartData = {};
       $scope.graphRisingChartData = {};
+
+      console.log("HistoryController 1:renewToken");
+      vm.auth.renewToken();
+      console.log("HistoryController 2:renewToken");
+
+
 
       function sortByKey(array, key) {
           return array.sort(function(a, b) {
@@ -323,16 +330,32 @@
       };
 
 
-      function retrieveHistoryList() {
+      // function retrieveHistoryList() {
+      //
+      //     $http.get(DJANGO_SERVICE_URL+'/history/').then(function (response) {
+      //         // var unsorted_his_list = response.data;
+      //         // console.log("unsorted_his_list ", unsorted_his_list[0].execution_date );
+      //         vm.historyList = response.data;
+      //         console.log("sorted_his_list ", vm.historyList );
+      //     });
+      // }
+      // retrieveHistoryList();
 
-          $http.get(DJANGO_SERVICE_URL+'/history/').then(function (response) {
+
+      function retrieveHistoryList_authid() {
+
+          var authid = localStorage.getItem('sub');
+          authid = authid.substring(6, authid.length);
+          console.log("authid--->", authid);
+
+          $http.get(DJANGO_SERVICE_URL+'/history_authid/'+authid).then(function (response) {
               // var unsorted_his_list = response.data;
               // console.log("unsorted_his_list ", unsorted_his_list[0].execution_date );
               vm.historyList = response.data;
               console.log("sorted_his_list ", vm.historyList );
           });
       }
-      retrieveHistoryList();
+      retrieveHistoryList_authid();
 
 
       $scope.deleteHistory = function(queryId) {
@@ -355,30 +378,30 @@
       };
 
 
+      //from 2012-01-01 to 2/2/2017
+      $scope.convert_date = function(my_date){
 
-          // $http.get(DJANGO_SERVICE_URL+'/history_export/'+queryId+'/', {
-          //     headers : {'Content-type' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
-          //     responseType: 'arraybuffer' })
-          //     .then(function successCallback(response) {
-          //         console.log("2 inside success exportHistory response ",response );
-          //         var file = new Blob([ response ], {
-          //             type : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-          //         });
-          //
-          //         var fileURL = URL.createObjectURL(file);
-          //         var a         = document.createElement('a');
-          //         a.href        = fileURL;
-          //         a.target      = '_blank';
-          //         a.download    = 'yourfilename.xlsx';
-          //         document.body.appendChild(a);
-          //         a.click();
-          //
-          //         }, function errorCallback(response) {
-          //         console.log("3 inside error exportHistory response ", response );
-          //     });
+          var year = my_date.substring(0,4);
+          var month = my_date.substring(5,7);
+          var day = my_date.substring(8,10);
+          // var ocd_date = day+'/'+month+'/'+year;
+          console.log("convert_date month ",month );
+          console.log("convert_date day ",day );
 
-      // };
-      // $http.post('Api/DownloadURL',$scope.data,{responseType:'arraybuffer'})
+          return day+'/'+month+'/'+year;
+      };
+
+      $scope.sendOCD = function(keyword, start_date, end_date) {
+
+          var ocd_start = $scope.convert_date(start_date);
+          var ocd_end = $scope.convert_date(end_date);
+
+          // var ocdPath = 'http://ec2-34-248-183-236.eu-west-1.compute.amazonaws.com:9000/home?keywords='+keyword+'&inDate='+ocd_start+'&endDate='+ocd_end;
+          var ocdPath =  OCD_SERVICE_URL+'/home?keywords='+keyword+'&inDate='+ocd_start+'&endDate='+ocd_end;
+          console.log("1 inside success sendOCD response ",ocdPath );
+          window.open(ocdPath, '_self', '');
+      };
+
 
 
       $scope.retrieveHistory = function(queryId) {

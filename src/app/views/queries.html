@@ -5,16 +5,22 @@
     <div ng-show="isLoading">
         <div><b>Discovering trends for :</b> {{description}}  - <b>Searching term:</b> {{keyword}}</div>
         <br>
-        This might take some minutes depending on the Query parameters.
-        <br>
-        You can check the History page in order to view the results when they are ready.
+        This might take about one minute depending on the Query parameters.
 
     </div>
     <div ng-show="isCompleted">
         <div><b>Discovering trends for :</b> {{description}}  - <b>Searching term:</b> {{keyword}} - <b>Processing duration:</b> {{call_duration}} </div>
         <br>
-        Discovery completed successfully. You can check the History page in order to view the results.
+        <b>Discovery completed successfully!!! </b><br>
+        You may now visit the Results page in order to view the results.
     </div>
+    <div ng-show="isCompletedError">
+        <div><b>Discovering trends for :</b> {{description}}  - <b>Searching term:</b> {{keyword}}  </div>
+        <br>
+        <b>Discovery completed unsuccessfully!!! </b><br>
+        Please revise Query parameters and try again.
+    </div>
+
 
 </div>
 <br>
@@ -65,12 +71,31 @@
                     <md-content layout-padding>
                         <div>
                             <form ng-submit="vm.postQuery()" name="userForm">
+
                                 <div layout-gt-sm="row">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>Description</label>
                                         <input ng-model="vm.newquery.description">
                                     </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <div layout="row">
+                                            <md-button class="md-raised" ng-click='getcampaigns()'>Retrieve ABT Campaigns</md-button>
+                                            <!--<md-progress-circular md-mode="indeterminate"  md-diameter="30px"></md-progress-circular>-->
+                                        </div>
+                                    </md-input-container>
+
+                                    <md-input-container class="md-block" flex-gt-sm>
+
+                                        <label>ABT campaigns - {{vm.clicktoopenABT}}</label>
+                                        <md-select ng-model="vm.newquery.description">
+                                            <md-option ng-repeat="campaign_one in vm.campaignsList">
+                                             {{campaign_one}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
                                 </div>
+
                                 <div layout-gt-sm="row">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>Keyword</label>

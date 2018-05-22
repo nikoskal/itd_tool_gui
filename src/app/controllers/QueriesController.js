@@ -3,22 +3,29 @@
     angular
         .module('app')
         .controller('QueriesController', [
-            '$http','$scope','$location', '$anchorScroll',
+            '$http','$scope','$location', '$anchorScroll','authService',
             QueriesController
         ]);
 
 
+    QueriesController.$inject = ['authService'];
 
-
-    function QueriesController($http, $scope, $location, $anchorScroll) {
+    function QueriesController($http, $scope, $location, $anchorScroll, authService) {
         var vm = this;
         vm.queriesData  =[];
         vm.postQuery = postNewQuery;
         $scope.isLoading =  false;
         vm.topics = {};
         vm.clicktoopen = {};
+        vm.clicktoopenAbt = {};
         $scope.isLoading =  false;
         $scope.isCompleted =  false;
+        $scope.isCompletedError = false;
+        vm.auth = authService;
+
+        console.log("QueriesController 1:renewToken");
+        vm.auth.renewToken();
+        console.log("QueriesController 2:renewToken");
 
         $scope.categories = [
             {name:"All categories",
@@ -111,7 +118,8 @@
             google:"",
             youtube:"",
             topic:"",
-            category:""
+            category:"",
+            authid:""
         };
 
 
@@ -129,10 +137,12 @@
                 google:"",
                 youtube:"",
                 topic:"",
-                category:""
+                category:"",
+                authid:""
             };
             vm.topics = {};
             vm.clicktoopen = {};
+            vm.clicktoopenABT = {};
         }
 
 
@@ -140,6 +150,7 @@
         $scope.clearusermsg = function() {
             $scope.isLoading =  false;
             $scope.isCompleted =  false;
+            $scope.isCompletedError = false;
             $scope.keyword = {};
             $scope.description = {};
             $scope.call_duration = {};
@@ -167,14 +178,31 @@
         };
 
 
-        function retrieveAllQueries() {
+        // function retrieveAllQueries() {
+        //
+        //     $http.get(DJANGO_SERVICE_URL+'/query-parameters/').then(function (response) {
+        //         vm.queriesData = response.data;
+        //         // console.log("inside vm.queriesData",  vm.queriesData);
+        //         // console.log("inside vm.queriesData",  vm.queriesData[0].category);
+        //         for(var i = 0; i <  vm.queriesData.length; i++){
+        //             // console.log("inside getCategoryName",  $scope.categories[i].id)
+        //             var catName = $scope.getCategoryName(vm.queriesData[i].category);
+        //             vm.queriesData[i].category = catName;
+        //         }
+        //     });
+        //     reset_data();
+        // }
+        // retrieveAllQueries();
 
-            // $http.get('http://147.102.22.76:8000/query-parameters/').then(function (response) {
-            // $http.get('http://147.102.22.76:8000/query-parameters/').then(function (response) {
-            $http.get(DJANGO_SERVICE_URL+'/query-parameters/').then(function (response) {
+        function retrieveAllQueries_authid() {
+
+            var authid = localStorage.getItem('sub');
+            authid = authid.substring(6, authid.length);
+            console.log("authid--->", authid);
+
+            $http.get(DJANGO_SERVICE_URL+'/query_parameters_authid/'+authid).then(function (response) {
                 vm.queriesData = response.data;
-                // console.log("inside vm.queriesData",  vm.queriesData);
-                // console.log("inside vm.queriesData",  vm.queriesData[0].category);
+
                 for(var i = 0; i <  vm.queriesData.length; i++){
                     // console.log("inside getCategoryName",  $scope.categories[i].id)
                     var catName = $scope.getCategoryName(vm.queriesData[i].category);
@@ -183,7 +211,13 @@
             });
             reset_data();
         }
-        retrieveAllQueries();
+        retrieveAllQueries_authid();
+
+
+
+
+
+
 
 
         function postNewQuery() {
@@ -194,7 +228,17 @@
                     'Content-Type': 'application/json'
                 }
             };
+            // var authid = localStorage.getItem('sub')
 
+            var authid = localStorage.getItem('sub');
+            authid = authid.substring(6, authid.length);
+
+            console.log("authid--->", authid);
+
+
+            vm.newquery.authid = authid;
+
+            console.log("vm.newquery post data:", vm.newquery );
             // $http.post('http://147.102.22.76:8000/query-parameters/', vm.newquery, config)
             $http.post(DJANGO_SERVICE_URL+'/query-parameters/', vm.newquery, config)
                 .then(function successCallback(response) {
@@ -265,9 +309,54 @@
             vm.activated = false;
         };
 
+
+
+
+
+        $scope.getcampaigns= function() {
+            console.log("getcampaigns start");
+            vm.clicktoopenABT = {};
+            // $scope.isLoading = true;
+            // if keyword contains spaces change them with _
+
+            vm.campaignsList = [];
+
+
+            // betty: auth0|5a0d62ce9f01136123aed968
+            // nikosk: auth0|5a27f35653673e543b454fb0
+            // var myurl = 'http://ec2-34-241-230-92.eu-west-1.compute.amazonaws.com:8888/api/jsonws/producer-portlet.producer/get-all-campaigns-by-auth-id/auth-id/auth0|5a0d62ce9f01136123aed968';
+            var myurl = 'http://ec2-34-241-230-92.eu-west-1.compute.amazonaws.com:8888/api/jsonws/producer-portlet.producer/get-all-campaigns-by-auth-id/auth-id/'+ localStorage.getItem('sub');
+
+            console.log("myurl", myurl);
+
+            $http({
+                method: 'GET',
+                // url: 'http://ec2-34-241-230-92.eu-west-1.compute.amazonaws.com:8888/api/jsonws/producer-portlet.producer/get-all-campaigns-by-auth-id/auth-id/auth0|5a0d62ce9f01136123aed968',
+                url: myurl,
+                headers: {
+                    'Authorization': 'Basic QWRtaW5pc3RyYXRvcjpBZG1pbmlzdHJhdG9y'
+                }
+            }).then(function successCallback(response) {
+                console.log("getcampaigns", response);
+                var campLs = response;
+                console.log("campLs", campLs);
+                vm.clicktoopenABT = "click to select an ABT campaing";
+                for (var i = 0; i < campLs.data.length; i++) {
+                    var onecampaign = campLs.data[i];
+                    console.log("one campaign desc", onecampaign.campaign_description);
+                    vm.campaignsList.push(onecampaign.campaign_description);
+                }
+                console.log("all campaign desc list", vm.campaignsList);
+
+                }, function errorCallback(response) {
+                console.log("inside error getcampaigns, response:", response);
+            });
+        };
+
+
         $scope.discover = function(queryId, keyword, description) {
 
-            $scope.clearusermsg()
+            $scope.clearusermsg();
             console.log("inside discover",  queryId);
             // $scope.clearalldata();
             $scope.isLoading = true;
@@ -287,6 +376,7 @@
                 }, function errorCallback(response) {
                     console.log("inside error discover response", response );
                     $scope.isLoading = false;
+                    $scope.isCompletedError = true;
                 });
         };
     }
