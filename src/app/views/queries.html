@@ -70,12 +70,12 @@
                 <div ng-cloak layout="column" ng-cloak class="md-inline-form" >
                     <md-content layout-padding>
                         <div>
-                            <form ng-submit="vm.postQuery()" name="userForm">
+                            <form ng-submit="vm.postQuery()" name="queryUserForm">
 
                                 <div layout-gt-sm="row">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>Description</label>
-                                        <input ng-model="vm.newquery.description">
+                                        <input ng-model="vm.newquery.description" required>
                                     </md-input-container>
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <div layout="row">
@@ -99,12 +99,12 @@
                                 <div layout-gt-sm="row">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>Keyword</label>
-                                        <input ng-model="vm.newquery.keywords">
+                                        <input ng-model="vm.newquery.keywords" required>
                                     </md-input-container>
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <div layout="row">
                                         <md-button class="md-raised" ng-click='gettopics(vm.newquery.keywords)'>Retrieve Topics</md-button>
-                                            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="30px"></md-progress-circular>
+                                            <md-progress-circular md-mode="indeterminate" ng-show="isLoadingKey" md-diameter="30px"></md-progress-circular>
                                         </div>
                                     </md-input-container>
                                     <md-input-container class="md-block" flex-gt-sm>
@@ -138,23 +138,25 @@
                                 </div>
                                 <div layout="row">
                                     <div flex="25">
+                                        <label for="startDate" class="control-label">Start Date:</label>
                                         <md-input-container class="md-block">
-                                                <label>Start-date <br>(e.g., 2015-12-25)</label>
-                                                <input ng-model="vm.newquery.start_date"></input>
+                                            <input type="date" id="startDate" ng-model="vm.newquery.start_date" required ng-change='checkErr(vm.newquery.start_date,vm.newquery.end_date)'></input>
                                         </md-input-container>
                                     </div>
-                                    <div flex="60">
-                                        <md-input-container>
-                                                <label>End-date  <br>(e.g., 2016-12-25)</label>
-                                                <input ng-model="vm.newquery.end_date"></input>
+                                    <div flex="25">
+                                        <label for="endDate" class="control-label">End Date:</label>
+                                        <md-input-container class="md-block">
+                                            <input type="date" id="endDate" ng-model="vm.newquery.end_date" required ng-change='checkErr(vm.newquery.start_date,vm.newquery.end_date)'></input>
                                         </md-input-container>
                                     </div>
+                                    {{errMessage}}
                                 </div>
+
                                 <div layout="row">
 
                                     <div flex="35">
                                             <md-input-container class="md-block">
-                                                <label>Targeted region(s) (default is "world" <br>otherwise use two-letter country code e.g., FR )</label>
+                                                <label>Targeted region (default is "world" <br>otherwise use two-letter country code e.g., FR )</label>
                                                 <input ng-model="vm.newquery.location"></input>
                                             </md-input-container>
                                         </div>
@@ -181,7 +183,11 @@
                                         <label>Extract relevant questions</label>
                                     </md-checkbox>
                                 </div>
-                                <input type="submit" id="submit" value="Submit Query Configuration" />
+                                <input type="submit" id="submit" value="Submit Query Configuration" ng-disabled = "queryUserForm.$invalid"/>
+
+
+
+
                             </form>
                         </div>
                     </md-content>

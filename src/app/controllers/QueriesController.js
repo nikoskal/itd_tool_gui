@@ -22,10 +22,11 @@
         $scope.isCompleted =  false;
         $scope.isCompletedError = false;
         vm.auth = authService;
+        $scope.errMessage = '';
 
-        console.log("QueriesController 1:renewToken");
-        vm.auth.renewToken();
-        console.log("QueriesController 2:renewToken");
+        console.log("QueriesController 1:checkSessionLogoutFromOtherTool");
+        // vm.auth.checkSessionLogoutFromOtherTool();
+        console.log("QueriesController 2:checkSessionLogoutFromOtherTool");
 
         $scope.categories = [
             {name:"All categories",
@@ -285,7 +286,7 @@
         $scope.gettopics= function(keyword){
             console.log("gettopics",  keyword);
             vm.clicktoopen = {};
-            $scope.isLoading = true;
+            $scope.isLoadingKey = true;
             // if keyword contains spaces change them with _
 
             vm.topics = {};
@@ -300,7 +301,7 @@
                     mid: 'none',
                 };
                 vm.topics.push(none);
-                $scope.isLoading = false;
+                $scope.isLoadingKey = false;
                 // console.log("vm.deactivated = false;", $scope.isLoading);
                 vm.clicktoopen = "click to select a topic";
             }, function errorCallback(response) {
@@ -351,6 +352,25 @@
                 }, function errorCallback(response) {
                 console.log("inside error getcampaigns, response:", response);
             });
+        };
+
+        $scope.checkErr = function(startDate,endDate) {
+            $scope.errMessage = '';
+            var curDate = new Date();
+
+            if(new Date(startDate) > new Date(endDate)){
+                $scope.errMessage = 'End Date should be greater than Start Date';
+                return false;
+            }
+            if(new Date(endDate) > curDate){
+                $scope.errMessage = 'End date should not be before today.';
+                return false;
+            }
+            if (new Date(startDate) < new Date(endDate)  && new Date(endDate) < curDate){
+                $scope.errMessage = '';
+            }
+
+            console.log("inside errMessage:",  $scope.errMessage);
         };
 
 
