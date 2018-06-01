@@ -127,59 +127,77 @@
                                                 {{category.name}}
                                             </md-option>
                                         </md-select>
-
-
                                     </md-input-container>
-                                    <md-input-container class="md-block" flex-gt-sm>
-                                    </md-input-container>
-                                    <md-input-container class="md-block" flex-gt-sm>
-
-                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm></md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm></md-input-container>
                                 </div>
+                                <br>
+
+                                <div layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Country</label>
+                                        <md-select ng-model="vm.newquery.location">
+                                            <md-option ng-repeat="country in countries" value="{{country.id}}" ng-selected="$first">
+                                                {{country.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm></md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm></md-input-container>
+                                </div>
+
+                                <br>
+
                                 <div layout="row">
-                                    <div flex="25">
-                                        <label for="startDate" class="control-label">Start Date:</label>
+                                    <div flex="15">
+                                        <label for="startDate" style="color:grey;" class="control-label">Start Date:</label>
                                         <md-input-container class="md-block">
                                             <input type="date" id="startDate" ng-model="vm.newquery.start_date" required ng-change='checkErr(vm.newquery.start_date,vm.newquery.end_date)'></input>
                                         </md-input-container>
                                     </div>
-                                    <div flex="25">
-                                        <label for="endDate" class="control-label">End Date:</label>
+                                    <div flex="15">
+                                        <label for="endDate" style="color:grey;" class="control-label">End Date:</label>
                                         <md-input-container class="md-block">
                                             <input type="date" id="endDate" ng-model="vm.newquery.end_date" required ng-change='checkErr(vm.newquery.start_date,vm.newquery.end_date)'></input>
                                         </md-input-container>
                                     </div>
-                                    {{errMessage}}
+                                    <span style="color:red;">{{errMessage}}</span>
                                 </div>
 
-                                <div layout="row">
+                                <!--<div layout="row">-->
 
-                                    <div flex="35">
-                                            <md-input-container class="md-block">
-                                                <label>Targeted region (default is "world" <br>otherwise use two-letter country code e.g., FR )</label>
-                                                <input ng-model="vm.newquery.location"></input>
-                                            </md-input-container>
-                                        </div>
-                                </div>
+                                    <!--<div flex="35">-->
+                                            <!--<md-input-container class="md-block">-->
+                                                <!--<label>Targeted country (default is "world" <br>otherwise use two-letter country code e.g., FR )</label>-->
+                                                <!--<input ng-model="vm.newquery.location"></input>-->
+                                            <!--</md-input-container>-->
+                                        <!--</div>-->
+                                <!--</div>-->
+
+
+
                                 <!--style="background-color:white; margin: 30px; padding:30px; box-shadow: 10px 10px 5px grey;"-->
                                 <div layout-sm="row">
 
                                     <label>Information Sources:</label>
-                                        <md-checkbox ng-model="vm.newquery.twitter">
+                                        <md-checkbox ng-model="vm.newquery.twitter"  ng-change='changedTwitterCheckbox()'>
                                             <label>Twitter</label>
                                         </md-checkbox>
                                         &nbsp &nbsp
-                                        <md-checkbox ng-model="vm.newquery.google">
+                                        <md-checkbox ng-model="vm.newquery.google" ng-change='changedGoogleCheckbox()'>
                                             <label>Google</label>
                                         </md-checkbox>
+                                        <span ng-if = "vm.newquery.twitter == false && vm.newquery.google == false" style="color:red;">&nbsp;&nbsp;{{infSourcesMessage}}</span>
                                 </div>
+
                                 <div layout-sm="row">
 
-                                    <md-checkbox ng-model="vm.newquery.inference">
+                                    <md-checkbox ng-disabled="!vm.newquery.twitter" ng-model="vm.newquery.inference" >
                                         <label>Estimate Sentiment and Gender</label>
                                     </md-checkbox>
+
                                     <br>
-                                    <md-checkbox ng-model="vm.newquery.questions">
+                                    <md-checkbox ng-disabled="!vm.newquery.google" ng-model="vm.newquery.questions">
                                         <label>Extract relevant questions</label>
                                     </md-checkbox>
                                 </div>

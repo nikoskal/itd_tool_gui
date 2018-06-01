@@ -22,11 +22,41 @@
         $scope.isCompleted =  false;
         $scope.isCompletedError = false;
         vm.auth = authService;
-        $scope.errMessage = '';
+        $scope.errMessage = 'Please select time range.';
+        $scope.countries = [];
 
+        $scope.infSourcesMessage = 'Choose at least one information source.';
         console.log("QueriesController 1:checkSessionLogoutFromOtherTool");
         // vm.auth.checkSessionLogoutFromOtherTool();
         console.log("QueriesController 2:checkSessionLogoutFromOtherTool");
+
+
+        function load_country_codes() {
+
+            var world_country = {
+                name: "All Countries",
+                id: ""
+            };
+            $scope.countries.push(world_country);
+
+            var result = Object.keys(COUNTRIES).map(function(key) {
+                return [key, COUNTRIES[key]];
+            });
+
+            for(var i = 0; i <  result.length; i++){
+                var one_country = {
+                        name: result[i][1],
+                        id: result[i][0]
+                };
+                $scope.countries.push(one_country);
+            }
+
+        }
+        console.log("load_country_codes", $scope.countries);
+
+        load_country_codes();
+
+
 
         $scope.categories = [
             {name:"All categories",
@@ -116,13 +146,15 @@
             location: "",
             questions: "",
             twitter: "",
-            google:"",
+            google: "",
             youtube:"",
             topic:"",
             category:"",
             authid:""
         };
 
+        vm.newquery.twitter = false;
+        vm.newquery.google = false;
 
         function reset_data() {
             vm.newquery = {
@@ -312,17 +344,12 @@
 
 
 
-
-
         $scope.getcampaigns= function() {
-            console.log("getcampaigns start");
+            // console.log("getcampaigns start");
             vm.clicktoopenABT = {};
             // $scope.isLoading = true;
             // if keyword contains spaces change them with _
-
             vm.campaignsList = [];
-
-
             // betty: auth0|5a0d62ce9f01136123aed968
             // nikosk: auth0|5a27f35653673e543b454fb0
             // var myurl = 'http://ec2-34-241-230-92.eu-west-1.compute.amazonaws.com:8888/api/jsonws/producer-portlet.producer/get-all-campaigns-by-auth-id/auth-id/auth0|5a0d62ce9f01136123aed968';
@@ -357,6 +384,10 @@
         $scope.checkErr = function(startDate,endDate) {
             $scope.errMessage = '';
             var curDate = new Date();
+            if(typeof startDate === 'undefined' ||  endDate === 'undefined') {
+                $scope.errMessage = 'Please select time range';
+            }
+
 
             if(new Date(startDate) > new Date(endDate)){
                 $scope.errMessage = 'End Date should be greater than Start Date';
@@ -370,9 +401,20 @@
                 $scope.errMessage = '';
             }
 
-            console.log("inside errMessage:",  $scope.errMessage);
+            // console.log("inside errMessage:",  $scope.errMessage);
         };
 
+        $scope.changedTwitterCheckbox = function() {
+          if (vm.newquery.twitter === false) {
+              vm.newquery.inference = false;
+          }
+        };
+
+        $scope.changedGoogleCheckbox = function() {
+            if (vm.newquery.google === false) {
+                vm.newquery.questions = false;
+            }
+        };
 
         $scope.discover = function(queryId, keyword, description) {
 

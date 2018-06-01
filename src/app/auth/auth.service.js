@@ -6,9 +6,9 @@
         .module('app')
         .service('authService', authService);
 
-    authService.$inject = ['$state', 'angularAuth0', '$timeout', '$window'];
+    authService.$inject = ['$state', 'angularAuth0', '$timeout', '$window', '$q'];
 
-    function authService($state, angularAuth0, $timeout, $window) {
+    function authService($state, angularAuth0, $timeout, $window,$q) {
 
         var userProfile;
 
@@ -132,7 +132,7 @@
                     } else if (err) {
                         console.log("renewToken: error in handle auth 1");
                         // $state.go('home.dashboard');
-                        $window.location.href = 'http://producer-toolkit.eu/';
+                        // $window.location.href = 'http://producer-toolkit.eu/';
                         console.log('renewToken:  error in handle auth 2');
                 }
                 console.log("checkSession!!!!! ????");
@@ -145,10 +145,62 @@
             // console.log("i= ?", i++);
             var expiresAt = JSON.parse(localStorage.getItem('expires_at'));
             var authenticated = new Date().getTime() < expiresAt;
-            // console.log("7 isAuthenticated ?", authenticated);
+            // console.log("auth.service: isAuthenticated ?", authenticated);
             return authenticated;
         }
 
+        // function checkSessionLogoutFromOtherTool() {
+        //     console.log("auth.service: checkSessionLogoutFromOtherTool");
+        //     var deferred = $q.defer();
+        //
+        //     angularAuth0.checkSession({
+        //         audience: AUTH0_AUDIENCE,
+        //         scope: 'openid profile',
+        //         redirectUri: 'http://itd.producer-toolkit.eu/complete/auth0',
+        //         responseType: 'token id_token',
+        //     }, function (err, authResult) {
+        //         if (authResult && authResult.accessToken && authResult.idToken) {
+        //             console.log("auth.service: checkSessionLogoutFromOtherTool: true");
+        //             deferred.resolve(true);
+        //         } else if (err) {
+        //             console.log("auth.service: checkSessionLogoutFromOtherTool: false"+ err.description);
+        //             deferred.resolve(false);
+        //             // logout();
+        //         }
+        //     });
+        //
+        //     return deferred.promise;
+        // }
+
+
+
+        function checkSessionLogoutFromOtherTool() {
+            console.log("2 inside handleAuthentication");
+            angularAuth0.checkSession({
+                        audience: AUTH0_AUDIENCE,
+                        scope: 'openid profile',
+                        redirectUri: 'http://itd.producer-toolkit.eu/complete/auth0',
+                        responseType: 'token id_token'
+                    },
+                function(err, authResult) {
+
+                if (authResult && authResult.accessToken && authResult.idToken) {
+                    console.log("2a !!inside accessToken", authResult.accessToken);
+                    console.log("2b !!inside id_token", authResult.idToken);
+                    console.log("2c !!inside expires", authResult.expiresIn);
+                    console.log("2d !!inside sub", authResult.idTokenPayload.sub);
+
+                    console.log("2f !!inside name", authResult.idTokenPayload.name);
+                    console.log("2e !!inside all", authResult);
+                    // console.log("5 !!inside sub", authResult.idTokenPayload.sub);
+
+
+                    // $state.go('home.dashboard');
+                } else if (err) {
+                    console.log('2our error in handle auth 2'+ err.description);
+                }
+            });
+        }
 
         return {
             login: login,
@@ -156,8 +208,8 @@
             getProfile: getProfile,
             logout: logout,
             isAuthenticated: isAuthenticated,
-            renewToken: renewToken
-            // checkSession: checkSession
+            renewToken: renewToken,
+            checkSessionLogoutFromOtherTool : checkSessionLogoutFromOtherTool
         };
     }
 })();

@@ -43,11 +43,29 @@
       $scope.graphTopChartData = {};
       $scope.graphRisingChartData = {};
 
-      console.log("HistoryController 1:renewToken");
-      vm.auth.renewToken();
-      console.log("HistoryController 2:renewToken");
+      // console.log("HistoryController 1:renewToken");
+      // vm.auth.renewToken();
+      // console.log("HistoryController 2:renewToken");
 
+      // console.log("HistoryController 1:checkSessionLogoutFromOtherTool");
+      // vm.auth.checkSessionLogoutFromOtherTool();
+      // console.log("HistoryController 2:checkSessionLogoutFromOtherTool");
 
+      function reset_data() {
+          $scope.historyRegionInterestData = [];
+          $scope.keyword = {};
+          $scope.description = {};
+          $scope.historyRisingData = [];
+          $scope.historyTweets = [];
+          $scope.discoverTweetsGender  = {};
+          $scope.description = {};
+          $scope.timeInterestChartLineData = [];
+          $scope.volumeChartLineData = [];
+          $scope.regionChartData = [];
+          $scope.graphTopChartData = {};
+          $scope.graphRisingChartData = {};
+
+      }
 
       function sortByKey(array, key) {
           return array.sort(function(a, b) {
@@ -330,16 +348,6 @@
       };
 
 
-      // function retrieveHistoryList() {
-      //
-      //     $http.get(DJANGO_SERVICE_URL+'/history/').then(function (response) {
-      //         // var unsorted_his_list = response.data;
-      //         // console.log("unsorted_his_list ", unsorted_his_list[0].execution_date );
-      //         vm.historyList = response.data;
-      //         console.log("sorted_his_list ", vm.historyList );
-      //     });
-      // }
-      // retrieveHistoryList();
 
 
       function retrieveHistoryList_authid() {
@@ -406,6 +414,7 @@
 
       $scope.retrieveHistory = function(queryId) {
 
+          reset_data();
           $location.hash('top');
           $anchorScroll();
 
@@ -418,11 +427,23 @@
                   $scope.historyVolumeData = response.data.results.volume_list;
                   // $scope.historyTimeInterestData = response.data.results.time_interest_list;
                   $scope.timeInterestChartLineData = populate_timeInterestChartData(response.data.results.time_interest_list);
+
                   $scope.volumeChartLineData = populate_volumeChartData(response.data.results.volume_list);
                   $scope.regionChartData = populate_regionChartData(response.data.results.interest_over_region);
-                  $scope.graphTopChartData = populate_graphChartData(response.data.results.related_queries_list.top, false);
-                  $scope.graphRisingChartData = populate_graphChartData(response.data.results.related_queries_list.rising, true);
-                  $scope.sentimentVisitorsChartData = populate_graphChartData(response.data.results.related_queries_list.rising, true);
+
+                  if (typeof response.data.results.related_queries_list.top !== 'undefined') {
+                      $scope.graphTopChartData = populate_graphChartData(response.data.results.related_queries_list.top, false);
+                  }
+
+                  if (typeof response.data.results.related_queries_list.rising !== 'undefined') {
+                      $scope.graphRisingChartData = populate_graphChartData(response.data.results.related_queries_list.rising, true);
+                  }
+
+                  // if (typeof response.data.results.related_queries_list.rising !== 'undefined') {
+                  //     $scope.sentimentVisitorsChartData = populate_graphChartData(response.data.results.related_queries_list.rising, true);
+                  // }
+
+
 
                   $scope.historyRegionInterestData = response.data.results.interest_over_region;
                   $scope.historyQuestionData = response.data.results.autocomplete;

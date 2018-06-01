@@ -22,9 +22,9 @@
     vm.showSimpleToast = showSimpleToast;
     vm.toggleRightSidebar = toggleRightSidebar;
     // vm.trendqueries = getTrendQueries;
-      console.log("MainController 1:renewToken");
-      vm.auth.renewToken();
-      console.log("MainController 2:renewToken");
+      console.log("MainController 1:checkSessionLogoutFromOtherTool");
+      vm.auth.checkSessionLogoutFromOtherTool();
+      console.log("MainController 2:checkSessionLogoutFromOtherTool");
 
 
 
